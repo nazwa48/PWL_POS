@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Hash;
  
 class UserController extends Controller 
 { 
-    public function index() 
-    {
-        $user = UserModel::all(); 
-        return view('user', ['data' => $user]); 
-    } 
+    // public function index() 
+    // {
+    //     $user = UserModel::all(); 
+    //     return view('user', ['data' => $user]); 
+    // } 
     public function tambah() 
     { 
         return view('user_tambah'); 
@@ -51,4 +51,9 @@ class UserController extends Controller
 
         return redirect('/user');
     }
+    public function index() 
+    { 
+        $user = UserModel::with('level')->get(); 
+        return view('user', ['data' => $user]); 
+    } 
 } 
