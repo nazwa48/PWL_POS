@@ -21,3 +21,9 @@ Route::get('/kategori',[KategoriController::class,'index']);
 
 Route::get('/kategori/create', [KategoriController::class, 'create']);
 Route::post('/kategori', [KategoriController::class,'store']);
+
+Route::get('/kategori/create', [KategoriController::class, 'create'])->name('createkategori');
+
+Route::get('/kategori/update/{id}',[KategoriController::class,'update']);
+Route::put('/kategori/update_save/{id}',[KategoriController::class,'update_save']);
+Route::get('/kategori/destroy/{id}', [KategoriController::class, 'destroy']);
