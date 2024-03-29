@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\UserDataTable;
+use App\Http\Requests\StorePostRequest;
 use App\Models\UserModel; 
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Hash; 
@@ -14,20 +15,31 @@ class UserController extends Controller
     {
     return $dataTable->render('user.index');
     }
-    public function create() {
-    return view('user.create');
-    }
-    public function store(Request $request)
+    public function create()
     {
-    
-        // Buat entri baru dalam database
+        return view('user.create');
+    }
+
+    public function store(StorePostRequest $request)
+    {
+        // The incoming request is valid...
+
+        // Retrieve the validated input data...
+        $request->validate();
+
+        // Retreive a portion of the validated input data...
+        $request->safe()->only(['username', 'nama', 'password', 'level_id']);
+        $request->safe()->except(['username', 'nama', 'password', 'level_id']);
+
         UserModel::create([
             'username' => $request->username,
             'nama' => $request->nama,
+            'password' => Hash::make('$request->password'),
             'level_id' => $request->level_id,
-            'password' => Hash::make($request->password),
         ]);
-    
+
+        // Store the post
+
         return redirect('/user');
     }
     public function edit($id)

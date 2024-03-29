@@ -43,3 +43,6 @@ Route::post('/level', [LevelController::class, 'store']);
 Route::get('/level/edit/{id}', [LevelController::class, 'edit'])->name('/level/edit');
 Route::put('/level/{id}', [LevelController::class, 'edit_simpan'])->name('/level/edit_simpan');
 Route::get('/level/delete/{id}', [LevelController::class, 'delete'])->name('/level/delete');
+
+//m_user
+Route::resource('m_user', POSController::class);

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\DataTables\LevelDataTable;
+use App\Http\Requests\StorePostRequest;
 use App\Models\LevelModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,16 +14,29 @@ public function index(LevelDataTable $dataTable) {
 return $dataTable->render('level.index');
 }
 public function create() {
-return view('level.create');
-}
-public function store(Request $request)
+    return view('level.create');
+}  
+
+
+public function store(StorePostRequest $request)
 {
-LevelModel::create([
-'level_kode' => $request->level_kode,
-'level_nama' => $request->level_nama,
-]);
-return redirect('/level');
+     // The incoming request is valid...
+
+    // Retrieve the validated input data...
+    $request->validate();
+
+    // Retrieve a portion of the validated input data...
+    $request->safe()->only(['level_kode', 'level_nama']);
+    $request->safe()->except(['level_kode', 'level_nama']);
+    
+    LevelModel::create([
+        'level_kode' => $request->level_kode,
+        'level_nama' => $request->level_nama,
+    ]);
+
+    return redirect('/level');
 }
+
 public function edit($id)
 {
     $level = LevelModel::find($id);
