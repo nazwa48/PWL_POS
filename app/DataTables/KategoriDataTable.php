@@ -34,6 +34,8 @@ class KategoriDataTable extends DataTable
             ->setRowId('id');
     }
 
+ 
+
     /**
      * Get the query source of dataTable.
      */
