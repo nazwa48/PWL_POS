@@ -339,6 +339,13 @@ return [
             'url' => '/kategori', 
             'icon' => 'fas fa-fw fa-list', 
         ],
+        [
+            'text' => 'User',
+            'url' => '/m_user',
+            'icon' => 'fas fa-fw fa-user', 
+            'label_color' => 'success',
+        ],
+        
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

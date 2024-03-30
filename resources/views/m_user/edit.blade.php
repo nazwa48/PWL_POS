@@ -1,51 +1,4 @@
-@extends('m_user/template')
-@section('content')
-<div class="row mt-5 mb-5">
-<div class="col-lg-12 margin-tb">
-<div class="float-left">
-<h2>CRUD user</h2>
-</div>
-<div class="float-right">
-<a class="btn btn-success" href="{{ route('m_user.create') }}"> Input User</a>
-</div>
-</div>
-</div>
-@if ($message = Session::get('success'))
-<div class="alert alert-success">
-<p>{{ $message }}</p>
-</div>
-@endif
-<table class="table table-bordered">
-<tr>
-<th width="20px" class="text-center">User id</th>
-<th width="150px" class="text-center">Level id</th>
-<th width="200px"class="text-center">username</th>
-<th width="200px"class="text-center">nama</th>
-<th width="150px"class="text-center">password</th>
-</tr>
-@foreach ($useri as $m_user)
-<tr>
-
-<td>{{ $m_user->user_id }}</td>
-<td>{{ $m_user->level_id }}</td>
-<td>{{ $m_user->username }}</td>
-<td>{{ $m_user->nama }}</td>
-<td>{{ $m_user->password }}</td>
-
-<td class="text-center">
-<form action="{{ route('m_user.destroy',$m_user->user_id) }}" method="POST">
-<a class="btn btn-info btn-sm" href="{{ route('m_user.show',$m_user->user_id) }}">Show</a>
-<a class="btn btn-primary btn-sm" href="{{ route('m_user.edit',$m_user->user_id) }}">Edit</a>
-@csrf
-@method('DELETE')
-<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
-</form>
-</td>
-</tr>
-@endforeach
-</table>
-@endsection
-@extends('m_user/template')
+{{-- @extends('m_user/template')
 @section('content')
 <div class="row mt-5 mb-5">
 <div class="col-lg-12 margin-tb">
@@ -86,4 +39,80 @@
         </div>
         </form>
         @endsection
-        
+         --}}
+         @extends('layout.app')
+
+         {{-- customize layout section --}}
+         
+         @section('subtitle', 'User')
+         @section('content_header_title', 'Home')
+         @section('content_header_subtitle', 'User')
+         
+         @section('content')
+         <div class="container">
+            <div class="card">
+                <div class="card-header">
+             <div class="row mt-5 mb-5">
+                 <div class="col-lg-12 margin-tb">
+                     <div class="float-left">
+                         <h2>Edit User</h2 List>
+                     </div>
+                     <div class="float-right">
+                         <a class="btn btn-secondary" href="{{ route('m_user.index') }}">
+                             Kembali </a>
+                     </div>
+                 </div>
+             </div>
+             @if ($errors->any())
+                 <div class="alert alert-danger">
+                     <strong>Ops</strong> Input gagal<br><br>
+                     <ul>
+                         @foreach ($errors->all() as $error)
+                             <li>{{ $error }}</li>
+                         @endforeach
+                     </ul>
+                 </div>
+             @endif
+             <form action="{{ route('m_user.update', $useri->user_id) }}" method="POST">
+                 @csrf
+                 @method('PUT')
+                 <div class="row">
+                     <div class="col-xs-12 col-sm-12 col-md-12">
+                         <div class="form-group">
+                             <strong>User_id:</strong>
+                             <input type="text" name="user_id" value="{{ $useri->user_id }}" class="form-control" placeholder="Masukkan User ID"></input>
+                         </div>
+                     </div>
+                     <div class="col-xs-12 col-sm-12 col-md-12">
+                         <div class="form-group">
+                             <strong>Level_id:</strong>
+                             <input type="text" name="level_id" value="{{ $useri->level_id }}" class="form-control" placeholder="Masukkan level"></input>
+                         </div>
+                     </div>
+                     <div class="col-xs-12 col-sm-12 col-md-12">
+                         <div class="form-group">
+                             <strong>Username:</strong>
+                             <input type="text" value="{{ $useri->username }}" class="form-control" placeholder="Enter Username number"></input>
+                         </div>
+                     </div>
+                     <div class="col-xs-12 col-sm-12 col-md-12">
+                         <div class="form-group">
+                             <strong>Nama:</strong>
+                             <input type="text" value= "{{ $useri->nama }}"name="nama" class="form-control" placeholder="Masukkan name"></input>
+                         </div>
+                     </div>
+                     <div class="col-xs-12 col-sm-12 col-md-12">
+                         <div class="form-group">
+                             <strong>Password:</strong>
+                             <input type="password" value="{{ $useri->password }}" name="password" class="form-control" placeholder="Masukkan password"></input>
+                         </div>
+                     </div>
+                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                         <button type="submit" class="btn btn-primary">Update</button>
+                     </div>
+                 </div>
+             </form>
+            </div>
+        </div>
+         @endsection
+         
