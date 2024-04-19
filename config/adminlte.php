@@ -1,5 +1,7 @@
 <?php
 
+use function Laravel\Prompts\text;
+
 return [
 
     /*
@@ -323,29 +325,10 @@ return [
             'label_color' => 'success',
         ],
         [
-            'text' => 'Tambah User',
-            'url' => '/user',
-            'icon' => 'fas fa-user-plus',
-            'label_color' => 'success',
+            'text' => 'Kategori',
+            'url' => 'kategori',
+            'icon' => 'fas fa-fw fa-list'
         ],
-        [
-            'text' => 'Tambah Level',
-            'url' => '/level',
-            'icon' => 'fas fa-users',
-            'label_color' => 'success',
-        ],
-        [
-            'text' => 'kategori', 
-            'url' => '/kategori', 
-            'icon' => 'fas fa-fw fa-list', 
-        ],
-        [
-            'text' => 'User',
-            'url' => '/m_user',
-            'icon' => 'fas fa-fw fa-user', 
-            'label_color' => 'success',
-        ],
-        
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

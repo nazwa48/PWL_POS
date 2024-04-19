@@ -6,52 +6,38 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class KategoriSeeder extends Seeder
-{
+class KategoriSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
+    public function run(): void {
         $data = [
             [
                 'kategori_id' => 1,
-                'kategori_kode' => 'B001',
-                'kategori_nama' => 'Peralatan Rumah Tangga',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'kategori_kode' => 'bah',
+                'kategori_nama' => 'BeautyAndHealth',
             ],
             [
                 'kategori_id' => 2,
-                'kategori_kode' => 'B002',
-                'kategori_nama' => 'Olahraga',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'kategori_kode' => 'hc',
+                'kategori_nama' => 'HomeCare',
             ],
             [
                 'kategori_id' => 3,
-                'kategori_kode' => 'B003',
-                'kategori_nama' => 'Buku',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'kategori_kode' => 'snk',
+                'kategori_nama' => 'Snack',
             ],
             [
                 'kategori_id' => 4,
-                'kategori_kode' => 'B004',
-                'kategori_nama' => 'Mainan',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'kategori_kode' => 'elk',
+                'kategori_nama' => 'Elektronik',
             ],
             [
                 'kategori_id' => 5,
-                'kategori_kode' => 'B005',
-                'kategori_nama' => 'Kosmetik',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ];
-        
-        DB::table('m_kategori')->insert($data);
-        
+                'kategori_kode' => 'pkn',
+                'kategori_nama' => 'Pakaian',
+            ]
+            ];
+            DB::table('m_kategori')->insert($data);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserModel;
 use Illuminate\Http\Request;
-use App\Models\m_user;
 use Illuminate\Support\Facades\Hash;
 
 class POSController extends Controller
@@ -13,8 +13,8 @@ class POSController extends Controller
      */
     public function index()
     {
-        $useri = m_user::all(); // Mengambil semua isi tabel
-        return view('m_user.index', compact('useri'))->with('i');
+        $data = UserModel::with('level')->get();
+        return view('m_user.index', compact('data'))->with('i');
     }
 
     /**
@@ -30,33 +30,28 @@ class POSController extends Controller
      */
     public function store(Request $request)
     {
-        //melakukan validasi data
         $request->validate([
             'user_id' => 'max 20',
+            'level_id' => 'required',
             'username' => 'required',
             'nama' => 'required',
-
+            'password' => 'required',
         ]);
-        //fungsi eloquent untuk menambah data
-       // m_user::create($request->all());
 
-        m_user::create([
+        UserModel::create([
             'username' => $request->username,
             'nama' => $request->nama,
             'password' => Hash::make($request->password),
-            'level_id' => $request->level_id,
+            'level_id' => $request->level_id
         ]);
 
-        return redirect()->route('m_user.index')->with('success', 'User Berhasil Ditambahkan');
+        return redirect()->route('user.index')->with('success','Data Berhasil Ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id, m_user $useri)
+    public function show(string $id)
     {
-        $useri = m_user::findOrFail($id);
-        return view('m_user.show', compact('useri'));
+        $data = UserModel::where('user_id',$id)->with('level')->first();
+        return view('m_user.show', compact('data'));
     }
 
     /**
@@ -64,8 +59,8 @@ class POSController extends Controller
      */
     public function edit(string $id)
     {
-        $useri = m_user::find($id);
-        return view('m_user.edit', compact('useri'));
+        $data = UserModel::find($id);
+        return view('m_user.edit', compact('data'));
     }
 
     /**
@@ -74,14 +69,28 @@ class POSController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'username' => 'required',
+            'username' => 'required|unique:posts|max:255',
             'nama' => 'required',
             'password' => 'required',
+            'level_id'  => 'required',
         ]);
-        // fungsi eloquent untuk mengupdate data inputan kita
-        m_user::find($id)->update($request->all());
-        // jika data berhasil diupdate, akan kembali ke halaman utama
-        return redirect()->route('m_user.index')->with('success', 'Data Berhasil Diupdate');
+
+        $data = UserModel::find($id);
+
+        if(Hash::check($request->password, $data->password)){
+            $password = $data->password;
+        }else{
+            $password = Hash::make($request->password);
+        }
+
+        $data->update([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => $password,
+            'level_id' => $request->level_id,
+        ]);
+
+        return redirect()->route('user.index')->with('success','Data Berhasil Diupdate!');
     }
 
     /**
@@ -89,7 +98,27 @@ class POSController extends Controller
      */
     public function destroy(string $id)
     {
-        $useri = m_user::findOrFail($id)->delete();
-        return \redirect()->route('m_user.index')->with('success', 'Data Berhasil Dihapus');
+        $data = UserModel::findorfail($id)->delete();
+        return \redirect()->route('user.index')->with('success','Data Berhasil Dihapus!');
+    }
+
+    public function storeDashboard(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'max 20',
+            'level_id' => 'required',
+            'username' => 'required',
+            'nama' => 'required',
+            'password' => 'required',
+        ]);
+
+        UserModel::create([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => Hash::make('$request->password'),
+            'level_id' => $request->level_id
+        ]);
+
+        return redirect('/')->with('Success','Data Berhasil Ditambahkan!');
     }
 }
