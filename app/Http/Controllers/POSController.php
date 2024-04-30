@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserModel;
+use App\Models\m_user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,8 +13,9 @@ class POSController extends Controller
      */
     public function index()
     {
-        $data = UserModel::with('level')->get();
-        return view('m_user.index', compact('data'))->with('i');
+        // Fungsi eloquent menampilkan data menggunakan pagination
+        $useri = m_user::all(); // Mengambil semua isi tabel
+        return view('m_user.index', compact('useri'))->with('i');
     }
 
     /**
@@ -30,28 +31,35 @@ class POSController extends Controller
      */
     public function store(Request $request)
     {
+        // Melakukan validasi data
         $request->validate([
-            'user_id' => 'max 20',
-            'level_id' => 'required',
+            'user_id' => 'max:20',
             'username' => 'required',
             'nama' => 'required',
             'password' => 'required',
+            'level_id' => 'required',
         ]);
 
-        UserModel::create([
+        // Fungsi eloquent untuk menambah data
+        // m_user::create($request->all());
+        m_user::create([
             'username' => $request->username,
             'nama' => $request->nama,
             'password' => Hash::make($request->password),
-            'level_id' => $request->level_id
+            'level_id' =>  $request->level_id,
         ]);
 
-        return redirect()->route('user.index')->with('success','Data Berhasil Ditambahkan!');
+        return redirect()->route('m_user.index')
+            ->with('success', 'User Berhasil Ditambahkan');
     }
 
-    public function show(string $id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id, m_user $useri)
     {
-        $data = UserModel::where('user_id',$id)->with('level')->first();
-        return view('m_user.show', compact('data'));
+        $useri = m_user::findOrFail($id);
+        return view('m_user.show', compact('useri'));
     }
 
     /**
@@ -59,8 +67,8 @@ class POSController extends Controller
      */
     public function edit(string $id)
     {
-        $data = UserModel::find($id);
-        return view('m_user.edit', compact('data'));
+        $useri = m_user::find($id);
+        return view('m_user.edit', compact('useri'));
     }
 
     /**
@@ -69,28 +77,17 @@ class POSController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'username' => 'required|unique:posts|max:255',
+            'username' => 'required',
             'nama' => 'required',
             'password' => 'required',
-            'level_id'  => 'required',
         ]);
 
-        $data = UserModel::find($id);
+        // Fungsi eloquent untuk mengupdate data inputan kita
+        m_user::find($id)->update($request->all());
 
-        if(Hash::check($request->password, $data->password)){
-            $password = $data->password;
-        }else{
-            $password = Hash::make($request->password);
-        }
-
-        $data->update([
-            'username' => $request->username,
-            'nama' => $request->nama,
-            'password' => $password,
-            'level_id' => $request->level_id,
-        ]);
-
-        return redirect()->route('user.index')->with('success','Data Berhasil Diupdate!');
+        // Jika data berhasil diupdate, akan kembali ke halaman utama
+        return redirect()->route('m_user.index')
+            ->with('success', 'Data Berhasil Diupdate');
     }
 
     /**
@@ -98,27 +95,8 @@ class POSController extends Controller
      */
     public function destroy(string $id)
     {
-        $data = UserModel::findorfail($id)->delete();
-        return \redirect()->route('user.index')->with('success','Data Berhasil Dihapus!');
-    }
-
-    public function storeDashboard(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'max 20',
-            'level_id' => 'required',
-            'username' => 'required',
-            'nama' => 'required',
-            'password' => 'required',
-        ]);
-
-        UserModel::create([
-            'username' => $request->username,
-            'nama' => $request->nama,
-            'password' => Hash::make('$request->password'),
-            'level_id' => $request->level_id
-        ]);
-
-        return redirect('/')->with('Success','Data Berhasil Ditambahkan!');
+        $useri = m_user::findOrFail($id)->delete();
+        return \redirect()->route('m_user.index')
+            ->with('success', 'Data Berhasil Dihapus');
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 
 class StorePostRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class StorePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,8 +24,31 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'kodeKategori' => 'required',
-            'namaKategori' => 'required',
+            'kategori_kode' => 'required',
+            'kategori_nama' => 'required',
+            'username' => 'required',
+            'nama' => 'required',
+            'password' => 'required',
+            'level_id' => 'required',
+            'level_kode' => 'required',
+            'level_name' => 'required',
         ];
+    }
+
+    public function store(StorePostRequest $request): RedirectResponse{
+        $validated = $request->validated();
+        $validated = $request->safe()->only(['kategori_kode'], 'kategori_nama');
+        $validated = $request->safe()->except(['kategori_kode'], 'kategori_nama');
+
+        $validated = $request->validated();
+        $validated = $request->safe()->only(['username', 'nama', 'password', 'level_id']);
+        $validated = $request->safe()->except(['username', 'nama', 'password', 'level_id']);
+
+        $validated = $request->validated();
+        $validated = $request->safe()->only(['level_kode', 'level_nama']);
+        $validated = $request->safe()->except(['level_kode', 'level_nama']);       
+
+        return redirect('/kategori');
+        return redirect('/user');
     }
 }
