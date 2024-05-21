@@ -169,4 +169,3 @@ use App\Http\Controllers\ManagerController;
 
 Route::get('/file-upload', [FileUploadController::class, 'fileUpload'])->name('file.upload');
 Route::post('/file-upload', [FileUploadController::class, 'prosesFileUpload'])->name('file.upload.proses');
-Route::get('/image/{filename}', [FileUploadController::class, 'showFile'])->name('file.show');
