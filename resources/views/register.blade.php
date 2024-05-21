@@ -15,6 +15,8 @@
 
 @section('auth_header', __('adminlte::adminlte.register_message'))
 
+di
+
 @section('auth_body')
     <form action="{{ route('proses_register') }}" method="post">
         @csrf
